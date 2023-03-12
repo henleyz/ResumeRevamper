@@ -1,19 +1,97 @@
+* {
+
+  font-family: "Segoe UI", Arial, sans-serif;
+  
+}
+
 body {
-    width: 20rem;
+    width: 25rem;
+    margin: 2rem;
   }
   
-  ul {
-    list-style-type: none;
-    padding-inline-start: 0;
-    margin: 1rem 0;
-  }
+ul {
+  list-style-type: none;
+  padding-inline-start: 0;
+  margin: 1rem 0;
+}
+
+li {
+  padding: 0.25rem;
+}
+li:nth-child(odd) {
+  background: #53afff30;
+}
+li:nth-child(even) {
+  background: #ffffff;
+}
+
+h1{
+  font-size: 2rem;
+  font-weight: 200;
+  background-image: linear-gradient(to right, dodgerblue 0%, purple 80%);
+  background-size: 100%;
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  display: flex;
+  transition: background-image 1s;
+}
+
+button{
+  width: 100%;
+  padding: .25rem;
+  border: 1px solid rgb(143, 199, 255);
+  margin-top:5px;
   
-  li {
-    padding: 0.25rem;
-  }
-  li:nth-child(odd) {
-    background: #80808030;
-  }
-  li:nth-child(even) {
-    background: #ffffff;
-  }
+  transition: all 0.1s;
+  z-index: 1;
+  display:block;
+  cursor: pointer;
+
+  background-color: transparent;
+color: rgb(143, 199, 255);
+}
+
+button:hover{  
+  background-color: rgb(143, 199, 255);
+
+color: white;
+border: 1px solid rgb(143, 199, 255);
+}
+
+input{
+  width: 98%;
+  height: 0rem;
+  margin-top:5px;
+  display: none;
+  transition: all 0.3s;
+  border: 2px solid rgb(143, 199, 255);
+}
+
+#scrapedDesc{
+  font-size: small;
+  font-weight: 100;
+}
+
+#descTitle{
+  font-size: 1.5rem;
+  font-weight: 200;
+  background-image: linear-gradient(to right, dodgerblue 0%, purple 80%);
+  background-size: 100%;
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  display: flex;
+  transition: background-image 1s;
+  padding: 0;
+}
+
+
+#confirmation{
+  font-size: small;
+  color: blue;
+}

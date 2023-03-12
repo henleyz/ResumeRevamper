@@ -20,7 +20,7 @@ var jobDescription;
                 target: {
                     tabId: tab.id
                 },
-                func: () => document.getElementById("JobDescriptionContainer").innerText,
+                func: () => document.getElementById("JobDescriptionContainer").innerHTML,
             });
 
         } else if (url.hostname == 'www.linkedin.com') {
@@ -29,7 +29,7 @@ var jobDescription;
                 target: {
                     tabId: tab.id
                 },
-                func: () => document.getElementsByClassName("jobs-description__content")[0].innerText,
+                func: () => document.getElementsByClassName("jobs-description__content")[0].innerHTML,
             });
 
         } else if (url.hostname == 'www.indeed.com') { //indeed framed html workaround
@@ -41,10 +41,8 @@ var jobDescription;
                 .then(function(data) {
                     data = data.split("\n").slice(51)
                     data = data.slice(0, data.indexOf('        <script>') - 1).join("\n")
-                    result = stripHtml(data)
-                    console.log(stripHtml(data))
                     jobDescription = result;
-                    document.getElementById('scrapedDesc').textContent = result;
+                    document.getElementById('scrapedDesc').innerHTML = data;
                     return;
                 })
         } else {
@@ -55,31 +53,56 @@ var jobDescription;
         return;
     }
     // process the result
-    jobDescription = result;
-    document.getElementById('scrapedDesc').textContent = result;
+    jobDescription = stripHtml(result);
+    console.log(result)
+    document.getElementById('scrapedDesc').innerHTML = result;
     if (result === null) {
-        document.getElementById('descTitle').textContent = "not a job description page"
+        document.getElementById('descTitle').textContent = "Not a job description page"
     }
 })();
 
+var addMode = false;
 
-function storeResume() {
-    const resumeText = document.getElementById('resumeBox')
+async function storeResume() {
+    const storeButton = document.getElementById('ResumeStoreButton')
+    const inputField = document.getElementById('resumeBox')
+    const confirm = document.getElementById('confirmation')
+    if(!addMode) {
+        addMode = true;
+        storeButton.innerText = "Submit Resume"
+        inputField.style.display = 'block';
+        inputField.style.height = '1.5rem';
+        return;
+    } 
+    if (inputField.value === ""){
+        return;
+    }
+    inputField.style.display = 'none';
+    inputField.style.height = '0';
+    addMode = false;
+    storeButton.innerText = "Add Resume"
+
     chrome.storage.local.set({
         'resume': ''
     }).then(() => {
         console.log("Resume Cleared");
     });
     chrome.storage.local.set({
-        'resume': resumeText.value
+        'resume': inputField.value
     }).then(() => {
         console.log("Resume Stored");
+        storeButton.textContent == "green"
     });
-    resumeText.value = "";
+    inputField.value = "";
+    
+   
+
 }
 
 async function generateSuggestions() {
     let result = await chrome.storage.local.get('resume')
+    const prompt = `Can you make suggestions for this resume to better match this job description. Job Description:${jobDescription} Resume:${resume.result}`
+    document.getElementById('scrapedDesc').innerHTML = prompt;
     console.log(result.resume)
 }
 
@@ -88,3 +111,34 @@ function stripHtml(html) {
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";
 }
+
+
+
+async function makeAPICall(desc, resume){
+
+  const prompt = `Can you make suggestions for this resume to better match this job description. Job Description:${desc} Resume:${resume}`
+
+
+
+  await fetch(
+    `https://api.openai.com/v1/completions`,
+    {
+        body: JSON.stringify({"model": "text-davinci-003", "prompt": prompt, "temperature": 0, "max_tokens": 1500}),
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer  API_KEY_HERE",
+        },
+            }
+).then((response) => {
+    if (response.ok) {
+        response.json().then((json) => {
+            console.log(json);
+        });
+    }
+});
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
