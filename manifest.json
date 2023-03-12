@@ -14,6 +14,12 @@
         "default_popup": "popup.html"
       },
       "permissions": [
-        "storage"
-      ]
+        "storage",
+        "activeTab", "scripting"
+      ],
+
+      "background": {
+        "service_worker": "background.js"
+    }
+      
   }
