@@ -1,5 +1,6 @@
-# ResumeRevamper
 ![](images/icon-128.png)
+# ResumeRevamper
+
 Tailor your resume to job descriptions through the power of AI!
 #Instructions
 1. Download or clone this code
